@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quizapp/screens/create_quiz_page.dart';
-import 'package:quizapp/utilities/app_colors.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -16,13 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return GetMaterialApp(
+    return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const CreateQuizPage(),
+      title: 'Quiz App',
+      home: CreateQuizPage(),
     );
   }
 }
