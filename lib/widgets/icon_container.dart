@@ -35,8 +35,8 @@ class IconContainer extends StatelessWidget {
           ),
         ],
       ),
-      child: const Icon(
-        Icons.arrow_back_ios,
+      child: Icon(
+        iconData,
         color: Colors.white,
       ),
     );

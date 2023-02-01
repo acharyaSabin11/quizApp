@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quizapp/screens/create_quiz_page.dart';
 import 'package:get/get.dart';
+import 'package:quizapp/screens/landing/first_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quiz App',
-      home: CreateQuizPage(),
+      home: FirstScreen(),
     );
   }
 }
