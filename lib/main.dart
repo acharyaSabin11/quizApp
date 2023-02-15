@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:quizapp/screens/landing/first_screen.dart';
+import 'package:quizapp/routes/route_helper.dart';
 import 'helpers/dependencies.dart' as dep;
 
 void main() async {
@@ -18,10 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quiz App',
-      home: FirstScreen(),
+      getPages: RouteHelper.routes,
+      initialRoute: RouteHelper.getInitialPage(),
     );
   }
 }

@@ -25,7 +25,7 @@ class IconContainer extends StatelessWidget {
       height: Dimensions.responsiveHeight(containerSize),
       width: Dimensions.responsiveHeight(containerSize),
       decoration: BoxDecoration(
-        color: AppColors.lightBlueColor,
+        color: containerColor,
         borderRadius: BorderRadius.circular(Dimensions.responsiveHeight(10)),
         boxShadow: const [
           BoxShadow(

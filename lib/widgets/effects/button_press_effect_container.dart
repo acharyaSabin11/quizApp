@@ -47,21 +47,25 @@ class _ButtonPressEffectContainerState extends State<ButtonPressEffectContainer>
     });
   }
 
+  void onTap() {
+    if (animationController.status != AnimationStatus.completed) {
+      animationController.reset();
+    }
+    animationController.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (animationController.status != AnimationStatus.completed) {
-          animationController.reset();
-        }
-        animationController.forward();
+        onTap();
         if (widget.onTapFunction != null) {
           widget.onTapFunction!();
         }
       },
       child: AnimatedBuilder(
         animation: animationController,
-        builder: (context, child) => Container(
+        builder: (context, child) => SizedBox(
           height: widget.height,
           width: widget.width,
           child: Center(

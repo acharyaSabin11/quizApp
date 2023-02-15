@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quizapp/utilities/dimensions.dart';
 
 class BounceBackForthImage extends StatefulWidget {
   final String path;
   final Duration duration;
   final double imageHeight;
   final double xPos, yPos, xNeg, yNeg;
-  bool stopAnimation;
-  BounceBackForthImage({
+  const BounceBackForthImage({
     super.key,
     required this.path,
     required this.duration,
@@ -17,7 +15,6 @@ class BounceBackForthImage extends StatefulWidget {
     this.yPos = 0,
     this.xNeg = 0,
     this.yNeg = 0,
-    this.stopAnimation = false,
   });
 
   @override
@@ -70,17 +67,14 @@ class _BounceBackForthImageState extends State<BounceBackForthImage>
 
   @override
   void dispose() {
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stopAnimation == false) {
-      _animationController.forward();
-    } else {
-      _animationController.stop();
-    }
+    _animationController.forward();
+
     return AnimatedBuilder(
         animation: _animationController,
         builder: (context, value) {
