@@ -18,9 +18,11 @@ class Dimensions {
     return (width / developmentDeviceWidth) * deviceScreenWidth;
   }
 
+  static double height5 = responsiveHeight(5);
+  static double height10 = responsiveHeight(10);
+  static double height15 = responsiveHeight(15);
   static double height20 = responsiveHeight(20);
   static double height30 = responsiveHeight(30);
-  static double height15 = responsiveHeight(15);
   static double height50 = responsiveHeight(50);
   static double height60 = responsiveHeight(60);
   static double height130 = responsiveHeight(130);

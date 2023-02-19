@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/widgets/exit_enabled_widget.dart';
 import '../../utilities/app_colors.dart';
@@ -79,33 +80,99 @@ class SignUpPage extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        //Left Small Circle Design
+                        //top left Small Circle Design
                         Positioned(
-                          top: Dimensions.responsiveHeight(50) +
-                              Dimensions.statusBarHeight,
-                          left: Dimensions.responsiveWidth(70),
+                          top: -Dimensions.height50,
+                          left: -Dimensions.width15,
                           child: CircleAvatar(
                             backgroundColor: AppColors.lowOpacityWhiteColor,
-                            radius: Dimensions.responsiveHeight(40),
+                            radius: Dimensions.responsiveHeight(50),
+                            child: CircleAvatar(
+                              backgroundColor: AppColors.mainBlueColor,
+                              radius: Dimensions.responsiveHeight(25),
+                            ),
                           ),
                         ),
-                        //Right Large Circle Design
+                        //Right  Circle Design
                         Positioned(
-                          top: Dimensions.responsiveHeight(-20),
-                          right: Dimensions.responsiveWidth(-30),
+                          top: Dimensions.height30,
+                          right: -Dimensions.width40 * 3.5,
                           child: CircleAvatar(
                             backgroundColor: AppColors.lowOpacityWhiteColor,
                             radius: Dimensions.responsiveHeight(90),
+                            child: CircleAvatar(
+                              backgroundColor: AppColors.mainBlueColor,
+                              radius: Dimensions.responsiveHeight(65),
+                            ),
                           ),
                         ),
                         //Create Quiz Title
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: Dimensions.responsiveHeight(25) +
-                                    Dimensions.statusBarHeight),
-                            child: const BigText(text: "Create Quiz"),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: Dimensions.statusBarHeight +
+                                Dimensions.height10,
+                            left: Dimensions.width30,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    "./assets/images/logo.png",
+                                    height: Dimensions.deviceScreenHeight / 12,
+                                  ),
+                                  SizedBox(width: Dimensions.width15),
+                                  AnimatedTextKit(
+                                    pause: const Duration(seconds: 2),
+                                    displayFullTextOnTap: true,
+                                    repeatForever: true,
+                                    animatedTexts: [
+                                      TyperAnimatedText(
+                                        "Quiz App",
+                                        speed:
+                                            const Duration(milliseconds: 200),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const BigText(
+                                    text: "Register New Account",
+                                    textColor: Colors.white,
+                                    size: 30,
+                                  ),
+                                  SizedBox(height: Dimensions.height10),
+                                  Row(
+                                    children: [
+                                      const CustomText(
+                                        text: "Already have an account?",
+                                        textColor: Colors.white,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: const CustomText(
+                                          text: "Sign In",
+                                          textColor: Colors.blue,
+                                          size: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
