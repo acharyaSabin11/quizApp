@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color mainBlueColor = Color(0xFF0023FF);
+  static const Color logoBlueColor = Color(0xFF00DBFF);
+  static const Color logoBluishWhiteColor = Color(0xFFD7F7FE);
   static const Color lightBlueColor = Color.fromARGB(255, 68, 83, 249);
   static const Color lightestBlueColor = Color.fromARGB(255, 106, 118, 250);
 

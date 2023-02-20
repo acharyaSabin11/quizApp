@@ -4,12 +4,18 @@ class ButtonPressEffectContainer extends StatefulWidget {
   final Widget child;
   final double height, width;
   final Function()? onTapFunction;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
+  final BoxDecoration? decoration;
   const ButtonPressEffectContainer({
     super.key,
     required this.child,
     required this.height,
     required this.width,
     required this.onTapFunction,
+    this.margin,
+    this.padding,
+    this.decoration,
   });
 
   @override
@@ -65,12 +71,15 @@ class _ButtonPressEffectContainerState extends State<ButtonPressEffectContainer>
       },
       child: AnimatedBuilder(
         animation: animationController,
-        builder: (context, child) => SizedBox(
-          height: widget.height,
-          width: widget.width,
-          child: Center(
-            child: Transform.scale(
-              scale: scaleAnimation.value,
+        builder: (context, child) => Transform.scale(
+          scale: scaleAnimation.value,
+          child: Container(
+            margin: widget.margin,
+            padding: widget.padding,
+            decoration: widget.decoration,
+            height: widget.height,
+            width: widget.width,
+            child: Center(
               child: widget.child,
             ),
           ),

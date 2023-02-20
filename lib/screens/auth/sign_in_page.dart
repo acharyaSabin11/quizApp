@@ -9,8 +9,8 @@ import '../../widgets/app_text_field.dart';
 import '../../widgets/big_text.dart';
 import '../../widgets/custom_text.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +36,6 @@ class SignUpPage extends StatelessWidget {
                   children: [
                     const CustomText(
                       fontWeight: FontWeight.w500,
-                      text: "Full Name",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.person,
-                      hintText: "Your Name",
-                    ),
-                    SizedBox(
-                      height: Dimensions.height20,
-                    ),
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
                       text: "Email",
                       textColor: Colors.black,
                       size: 16,
@@ -73,18 +59,6 @@ class SignUpPage extends StatelessWidget {
                       prefixIcon: Icons.lock_outline,
                       hintText: "Password",
                     ),
-                    SizedBox(height: Dimensions.height20),
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
-                      text: "Confirm Password",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.lock_outline,
-                      hintText: "Re-type Password",
-                    ),
                     SizedBox(height: Dimensions.height50),
                     ButtonPressEffectContainer(
                       decoration: BoxDecoration(
@@ -96,7 +70,7 @@ class SignUpPage extends StatelessWidget {
                       onTapFunction: () {},
                       child: const Center(
                         child: CustomText(
-                          text: "Sign Up",
+                          text: "Sign In",
                         ),
                       ),
                     ),
@@ -224,38 +198,43 @@ class SignUpPage extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const BigText(
-                                    text: "Register New Account",
-                                    textColor: Colors.white,
-                                    size: 30,
-                                  ),
-                                  SizedBox(height: Dimensions.height15),
-                                  Row(
-                                    children: [
-                                      const CustomText(
-                                        text: "Already have an account?",
-                                        textColor: Colors.white,
-                                        size: 16,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.offNamed(
-                                              RouteHelper.getSignInPage());
-                                        },
-                                        child: const CustomText(
-                                          text: "Sign In",
-                                          textColor: AppColors.logoBlueColor,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: Dimensions.height20,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const BigText(
+                                      text: "Sign In",
+                                      textColor: Colors.white,
+                                      size: 30,
+                                    ),
+                                    SizedBox(height: Dimensions.height15),
+                                    Row(
+                                      children: [
+                                        const CustomText(
+                                          text: "Don't have an account?",
+                                          textColor: Colors.white,
                                           size: 16,
-                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        const SizedBox(width: 5),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.offNamed(
+                                                RouteHelper.getSignUpPage());
+                                          },
+                                          child: const CustomText(
+                                            text: "Sign Up",
+                                            textColor: AppColors.logoBlueColor,
+                                            size: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
