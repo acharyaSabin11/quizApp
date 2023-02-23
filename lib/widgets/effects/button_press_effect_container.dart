@@ -53,6 +53,13 @@ class _ButtonPressEffectContainerState extends State<ButtonPressEffectContainer>
     });
   }
 
+  //dispose animation controller
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   void onTap() {
     if (animationController.status != AnimationStatus.completed) {
       animationController.reset();

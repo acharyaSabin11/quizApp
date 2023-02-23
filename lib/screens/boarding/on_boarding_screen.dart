@@ -253,27 +253,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         key: UniqueKey(),
                         height: Dimensions.height60,
                         width: Dimensions.height60 * value,
+                        decoration: BoxDecoration(
+                            color: AppColors.mainBlueColor,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.height15)),
                         onTapFunction: () {
                           getStarted();
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.mainBlueColor,
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.height15)),
-                          child: Center(
-                              child: IgnorePointer(
-                            child: AnimatedTextKit(
-                              totalRepeatCount: 1,
-                              pause: const Duration(milliseconds: 500),
-                              animatedTexts: [
-                                TyperAnimatedText("Get Started",
-                                    textStyle: const TextStyle(
-                                        color: Colors.white, fontSize: 20))
-                              ],
-                            ),
-                          )),
-                        ),
+                        child: Center(
+                            child: IgnorePointer(
+                          child: AnimatedTextKit(
+                            totalRepeatCount: 1,
+                            pause: const Duration(milliseconds: 500),
+                            animatedTexts: [
+                              TyperAnimatedText("Get Started",
+                                  textStyle: const TextStyle(
+                                      color: Colors.white, fontSize: 20))
+                            ],
+                          ),
+                        )),
                       );
                     }),
           ],
