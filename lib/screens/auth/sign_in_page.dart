@@ -9,9 +9,16 @@ import '../../widgets/app_text_field.dart';
 import '../../widgets/big_text.dart';
 import '../../widgets/custom_text.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return ExitEnabledWidget(
@@ -42,6 +49,7 @@ class SignInPage extends StatelessWidget {
                     ),
                     SizedBox(height: Dimensions.height10),
                     AppTextField(
+                      textEditingController: emailController,
                       prefixIcon: Icons.email_outlined,
                       hintText: "ABCXYZ@gmail.com",
                     ),
@@ -56,6 +64,7 @@ class SignInPage extends StatelessWidget {
                     ),
                     SizedBox(height: Dimensions.height10),
                     AppTextField(
+                      textEditingController: passwordController,
                       prefixIcon: Icons.lock_outline,
                       hintText: "Password",
                     ),

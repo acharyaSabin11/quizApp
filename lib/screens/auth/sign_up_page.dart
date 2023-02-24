@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizapp/routes/route_helper.dart';
+import 'package:quizapp/utilities/app_constants.dart';
 import 'package:quizapp/widgets/effects/button_press_effect_container.dart';
 import 'package:quizapp/widgets/exit_enabled_widget.dart';
 import '../../utilities/app_colors.dart';
@@ -9,8 +10,115 @@ import '../../widgets/app_text_field.dart';
 import '../../widgets/big_text.dart';
 import '../../widgets/custom_text.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  String? emailError, passwordError, confirmPasswordError, nameError;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+
+  bool isFormValid() {
+    bool isEmailValid = false;
+    bool isPasswordValid = false;
+    bool isNameValid = false;
+    if (nameController.text.isEmpty) {
+      setState(() {
+        nameError = "This field is required";
+      });
+    } else {
+      setState(() {
+        nameError = null;
+      });
+      isNameValid = true;
+    }
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailError = "This field is required";
+      });
+    } else {
+      if (emailController.text.contains("@") &&
+          emailController.text.contains(".")) {
+        setState(() {
+          emailError = null;
+        });
+        isEmailValid = true;
+      } else {
+        setState(() {
+          emailError = "Invalid Email Format";
+        });
+      }
+    }
+
+    if (passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty) {
+      if (passwordController.text == confirmPasswordController.text &&
+          passwordController.text.length >=
+              AppConstants.minimumPasswordLength &&
+          confirmPasswordController.text.length >=
+              AppConstants.minimumPasswordLength) {
+        setState(() {
+          confirmPasswordError = null;
+          passwordError = null;
+        });
+        isPasswordValid = true;
+      } else {
+        setState(() {
+          confirmPasswordError = "Password doesn't match";
+        });
+      }
+    }
+
+    if (passwordController.text.isEmpty) {
+      setState(() {
+        passwordError = "This field is required";
+      });
+    } else if (passwordController.text.length <
+        AppConstants.minimumPasswordLength) {
+      setState(() {
+        passwordError =
+            "Password must be at least ${AppConstants.minimumPasswordLength} characters";
+      });
+    } else {
+      setState(() {
+        passwordError = null;
+      });
+    }
+
+    if (confirmPasswordController.text.isEmpty) {
+      setState(() {
+        confirmPasswordError = "This field is required";
+      });
+    } else if (confirmPasswordController.text.length <
+        AppConstants.minimumPasswordLength) {
+      setState(() {
+        confirmPasswordError =
+            "Password must be at least ${AppConstants.minimumPasswordLength} characters";
+      });
+    }
+
+    if (isEmailValid && isPasswordValid && isNameValid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //dispose controllers
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,86 +129,115 @@ class SignUpPage extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                top: Dimensions.height120 * 2.5,
+                top: Dimensions.height20 +
+                    Dimensions.height200 +
+                    Dimensions.statusBarHeight,
               ),
               width: double.maxFinite,
-              padding: EdgeInsets.symmetric(
-                horizontal: Dimensions.responsiveWidth(20),
+              padding: EdgeInsets.only(
+                right: Dimensions.width20,
+                left: Dimensions.width20,
+                top: Dimensions.height20 * 1.5,
               ),
               decoration:
                   const BoxDecoration(color: Colors.white, boxShadow: []),
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
-                      text: "Full Name",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.person,
-                      hintText: "Your Name",
-                    ),
-                    SizedBox(
-                      height: Dimensions.height20,
-                    ),
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
-                      text: "Email",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.email_outlined,
-                      hintText: "ABCXYZ@gmail.com",
-                    ),
-                    SizedBox(
-                      height: Dimensions.height20,
-                    ),
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
-                      text: "Password",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.lock_outline,
-                      hintText: "Password",
-                    ),
-                    SizedBox(height: Dimensions.height20),
-                    const CustomText(
-                      fontWeight: FontWeight.w500,
-                      text: "Confirm Password",
-                      textColor: Colors.black,
-                      size: 16,
-                    ),
-                    SizedBox(height: Dimensions.height10),
-                    AppTextField(
-                      prefixIcon: Icons.lock_outline,
-                      hintText: "Re-type Password",
-                    ),
-                    SizedBox(height: Dimensions.height50),
-                    ButtonPressEffectContainer(
-                      decoration: BoxDecoration(
-                        color: AppColors.mainBlueColor,
-                        borderRadius: BorderRadius.circular(15),
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomText(
+                        fontWeight: FontWeight.w500,
+                        text: "Full Name",
+                        textColor: Colors.black,
+                        size: 16,
                       ),
-                      height: Dimensions.height60,
-                      width: double.maxFinite,
-                      onTapFunction: () {},
-                      child: const Center(
-                        child: CustomText(
-                          text: "Sign Up",
+                      SizedBox(height: Dimensions.height10),
+                      AppTextField(
+                        textEditingController: nameController,
+                        prefixIcon: Icons.person,
+                        hintText: "Your Name",
+                        errorText: nameError,
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      const CustomText(
+                        fontWeight: FontWeight.w500,
+                        text: "Email",
+                        textColor: Colors.black,
+                        size: 16,
+                      ),
+                      SizedBox(height: Dimensions.height10),
+                      AppTextField(
+                        textEditingController: emailController,
+                        prefixIcon: Icons.email_outlined,
+                        hintText: "ABCXYZ@gmail.com",
+                        errorText: emailError,
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      const CustomText(
+                        fontWeight: FontWeight.w500,
+                        text: "Password",
+                        textColor: Colors.black,
+                        size: 16,
+                      ),
+                      SizedBox(height: Dimensions.height10),
+                      AppTextField(
+                        textEditingController: passwordController,
+                        prefixIcon: Icons.lock_outline,
+                        hintText: "Password",
+                        errorText: passwordError,
+                        hasHideButton: true,
+                      ),
+                      SizedBox(height: Dimensions.height20),
+                      const CustomText(
+                        fontWeight: FontWeight.w500,
+                        text: "Confirm Password",
+                        textColor: Colors.black,
+                        size: 16,
+                      ),
+                      SizedBox(height: Dimensions.height10),
+                      AppTextField(
+                        textEditingController: confirmPasswordController,
+                        prefixIcon: Icons.lock_outline,
+                        hintText: "Re-type Password",
+                        errorText: confirmPasswordError,
+                        hasHideButton: true,
+                      ),
+                      SizedBox(height: Dimensions.height50),
+                      ButtonPressEffectContainer(
+                        margin: EdgeInsets.only(
+                          bottom: Dimensions.height20,
+                        ),
+                        onTapFunction: () {
+                          var validity = isFormValid();
+                          if (validity == true) {
+                            Get.snackbar(
+                              "Form Validated",
+                              "Internal Validation of the form is done",
+                              backgroundColor: Colors.white,
+                              colorText: AppColors.mainBlueColor,
+                            );
+                          }
+                        },
+                        decoration: BoxDecoration(
+                          color: AppColors.mainBlueColor,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        height: Dimensions.height60,
+                        width: double.maxFinite,
+                        child: const Center(
+                          child: CustomText(
+                            text: "Sign Up",
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

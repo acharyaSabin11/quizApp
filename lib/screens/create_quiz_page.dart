@@ -107,9 +107,9 @@ class CreateQuizPage extends StatelessWidget {
                           size: 16,
                         ),
                         SizedBox(height: Dimensions.height20),
-                        AppTextField(
-                          hintText: "Your Question Here",
-                        ),
+                        // AppTextField(
+                        //   hintText: "Your Question Here",
+                        // ),
                         SizedBox(
                           height: Dimensions.height30,
                         ),
@@ -119,21 +119,21 @@ class CreateQuizPage extends StatelessWidget {
                           size: 16,
                         ),
                         SizedBox(height: Dimensions.height20),
-                        AppTextField(
-                          hintText: "Option A",
-                        ),
-                        SizedBox(height: Dimensions.height15),
-                        AppTextField(
-                          hintText: "Option B",
-                        ),
-                        SizedBox(height: Dimensions.height15),
-                        AppTextField(
-                          hintText: "Option C",
-                        ),
-                        SizedBox(height: Dimensions.height15),
-                        AppTextField(
-                          hintText: "Option D",
-                        ),
+                        // AppTextField(
+                        //   hintText: "Option A",
+                        // ),
+                        // SizedBox(height: Dimensions.height15),
+                        // AppTextField(
+                        //   hintText: "Option B",
+                        // ),
+                        // SizedBox(height: Dimensions.height15),
+                        // AppTextField(
+                        //   hintText: "Option C",
+                        // ),
+                        // SizedBox(height: Dimensions.height15),
+                        // AppTextField(
+                        //   hintText: "Option D",
+                        // ),
                         SizedBox(
                           height: Dimensions.height30,
                         ),
@@ -143,9 +143,9 @@ class CreateQuizPage extends StatelessWidget {
                           size: 16,
                         ),
                         SizedBox(height: Dimensions.height20),
-                        AppTextField(
-                          hintText: "A or B or C or D",
-                        ),
+                        // AppTextField(
+                        //   hintText: "A or B or C or D",
+                        // ),
                         SizedBox(height: Dimensions.height20),
                         Container(
                           height: 60,

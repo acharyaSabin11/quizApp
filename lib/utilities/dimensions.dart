@@ -27,6 +27,7 @@ class Dimensions {
   static double height60 = responsiveHeight(60);
   static double height130 = responsiveHeight(130);
   static double height120 = responsiveHeight(120);
+  static double height200 = responsiveHeight(200);
 
   static double width40 = responsiveWidth(40);
   static double width30 = responsiveWidth(25);

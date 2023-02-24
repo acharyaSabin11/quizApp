@@ -35,7 +35,7 @@ class RouteHelper {
     ),
     GetPage(
       name: getSignUpPage(),
-      page: () => const SignUpPage(),
+      page: () => SignUpPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
