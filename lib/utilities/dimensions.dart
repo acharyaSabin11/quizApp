@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class Dimensions {
   static double statusBarHeight = MediaQuery.of(Get.context!).viewPadding.top;
+  static double bottomBarHeight =
+      MediaQuery.of(Get.context!).viewPadding.bottom;
 
   static double deviceScreenHeight = Get.height.toDouble();
   static double deviceScreenWidth = Get.width.toDouble();
@@ -23,6 +25,8 @@ class Dimensions {
   static double height15 = responsiveHeight(15);
   static double height20 = responsiveHeight(20);
   static double height30 = responsiveHeight(30);
+  static double height35 = responsiveHeight(35);
+  static double height40 = responsiveHeight(40);
   static double height50 = responsiveHeight(50);
   static double height60 = responsiveHeight(60);
   static double height130 = responsiveHeight(130);
