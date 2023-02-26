@@ -15,7 +15,9 @@ class BigText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      maxLines: 1,
       style: TextStyle(
+        overflow: TextOverflow.ellipsis,
         fontFamily: "Roboto",
         fontSize: size,
         fontWeight: FontWeight.w500,

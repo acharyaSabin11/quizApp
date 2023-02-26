@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quizapp/routes/route_helper.dart';
-import 'package:quizapp/screens/home/home_screen.dart';
-import 'package:quizapp/utilities/app_colors.dart';
 import 'helpers/dependencies.dart' as dep;
 
 void main() async {
@@ -26,9 +24,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quiz App',
-      home: HomeScreen(),
-      // getPages: RouteHelper.routes,
-      // initialRoute: RouteHelper.getInitialPage(),
+      // home: HomeScreen(),
+      getPages: RouteHelper.routes,
+      initialRoute: RouteHelper.getInitialPage(),
     );
   }
 }

@@ -1,22 +1,46 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quizapp/controllers/auth_controller.dart';
+import 'package:quizapp/models/user_model.dart';
 import 'package:quizapp/utilities/app_colors.dart';
 import 'package:quizapp/utilities/dimensions.dart';
-import 'package:quizapp/widgets/small_text.dart';
 
 import '../../widgets/big_text.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/icon_container.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MainScreenState extends State<MainScreen> {
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+  UserModel? userModel;
+
   int currentIndex = 0;
   int listViewItemCount = 3;
+
+  //override init method
+  @override
+  void initState() {
+    super.initState();
+    //fetching the user data from the firestore
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userID)
+        .get()
+        .then((value) {
+      //setting the user data to the auth controller
+      setState(() {
+        userModel = UserModel.fromJson(value.data()!);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,11 +143,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      IconContainer(
-                        iconData: Icons.widgets_rounded,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.find<AuthController>().signOut();
+                        },
+                        child: const IconContainer(
+                          iconData: Icons.widgets_rounded,
+                        ),
                       ),
-                      IconContainer(
+                      const IconContainer(
                         iconData: Icons.notifications,
                       ),
                     ],
@@ -139,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: Dimensions.height10,
                   ),
-                  const BigText(
-                    text: "Sabin Acharya",
+                  BigText(
+                    text: userModel?.name ?? "user...",
                     size: 30,
                   ),
                 ],

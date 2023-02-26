@@ -1,39 +1,31 @@
 {
-  "project_info": {
-    "project_number": "598114544247",
-    "project_id": "quiz-app-7d828",
-    "storage_bucket": "quiz-app-7d828.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:598114544247:android:a54b192fb635a3d089f472",
-        "android_client_info": {
-          "package_name": "com.example.quizapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "598114544247-st07h793gt0nr96de9dpd5anaujakfvf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAKkXuq6q1Zi-Y7tFjKXe_2mIH1B-MDo6U"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "598114544247-st07h793gt0nr96de9dpd5anaujakfvf.apps.googleusercontent.com",
-              "client_type": 3
+    "project_info": {
+        "project_number": "598114544247",
+        "project_id": "quiz-app-7d828",
+        "storage_bucket": "quiz-app-7d828.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:598114544247:android:a54b192fb635a3d089f472",
+            "android_client_info": {
+                "package_name": "com.example.quizapp"
             }
-          ]
+        },
+        "oauth_client": [{
+            "client_id": "598114544247-st07h793gt0nr96de9dpd5anaujakfvf.apps.googleusercontent.com",
+            "client_type": 3
+        }],
+        "api_key": [{
+            "current_key": "AIzaSyAKkXuq6q1Zi-Y7tFjKXe_2mIH1B-MDo6U"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "598114544247-st07h793gt0nr96de9dpd5anaujakfvf.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
         }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    }],
+    "configuration_version": "1"
 }

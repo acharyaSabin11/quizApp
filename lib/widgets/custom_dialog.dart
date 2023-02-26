@@ -7,13 +7,13 @@ import 'package:quizapp/widgets/small_text.dart';
 class CustomDialog extends StatelessWidget {
   final String title, descriptionText;
   final List<Widget> actionWidgets;
-  final IconData? iconData;
+  final IconData iconData;
   final Color iconColor, titleColor, textColor;
   const CustomDialog({
     super.key,
     required this.title,
     required this.descriptionText,
-    this.iconData,
+    this.iconData = Icons.exit_to_app,
     this.actionWidgets = const [],
     this.iconColor = const Color(0xFF0023FF),
     this.titleColor = const Color(0xFF0023FF),
@@ -41,7 +41,7 @@ class CustomDialog extends StatelessWidget {
               iconData == null
                   ? Container()
                   : Icon(
-                      Icons.exit_to_app,
+                      iconData,
                       color: iconColor,
                     ),
               BigText(

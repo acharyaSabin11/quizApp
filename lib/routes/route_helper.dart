@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:quizapp/screens/auth/sign_up_page.dart';
 import 'package:quizapp/screens/boarding/on_boarding_screen.dart';
+import 'package:quizapp/screens/directors/auth_or_main_page_director.dart';
 import 'package:quizapp/utilities/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/auth/sign_in_page.dart';
+import '../screens/home/main_screen.dart';
 
 class RouteHelper {
   static final SharedPreferences sharedPreferences = Get.find();
@@ -12,10 +14,14 @@ class RouteHelper {
   static const String _signUpPage = '/signUpPage';
   static const String _signInPage = '/signInPage';
   static const String _initialPage = '/initialPage';
+  static const String _mainPage = '/mainPage';
+  static const String _authOrMainPageDirector = '/authOrMainPageDirector';
 
   static getOnBoardingPage() => _onBoardingPage;
   static getSignUpPage() => _signUpPage;
   static getSignInPage() => _signInPage;
+  static getMainPage() => _mainPage;
+  static getAuthOrMainPageDirector() => _authOrMainPageDirector;
   static getInitialPage() {
     bool firstInitialize = true;
     if (sharedPreferences.containsKey(AppConstants.firstLoad)) {
@@ -24,7 +30,7 @@ class RouteHelper {
     if (firstInitialize) {
       return _onBoardingPage;
     } else {
-      return _signUpPage;
+      return _authOrMainPageDirector;
     }
   }
 
@@ -42,6 +48,14 @@ class RouteHelper {
       name: getSignInPage(),
       page: () => const SignInPage(),
       transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: getAuthOrMainPageDirector(),
+      page: (() => AuthOrMainPageDirector()),
+    ),
+    GetPage(
+      name: getMainPage(),
+      page: () => const MainScreen(),
     ),
   ];
 }
