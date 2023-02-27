@@ -34,7 +34,7 @@ class SignInOptionsWidget extends StatelessWidget {
         SizedBox(width: Dimensions.width40),
         ButtonPressEffectContainer(
           onTapFunction: () async {
-            // await authController.signInWithFacebook();
+            await authController.signInWithMicrosoft();
           },
           height: Dimensions.height40,
           width: Dimensions.height40,
@@ -53,7 +53,7 @@ class SignInOptionsWidget extends StatelessWidget {
         SizedBox(width: Dimensions.width40),
         ButtonPressEffectContainer(
           onTapFunction: () async {
-            // await authController.signInWithFacebook();
+            await authController.signInWithFacebook();
           },
           height: Dimensions.height40,
           width: Dimensions.height40,

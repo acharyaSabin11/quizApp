@@ -124,6 +124,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       SizedBox(height: Dimensions.height10),
                       AppTextField(
+                        hasHideButton: true,
                         errorText: passwordErrorText,
                         textEditingController: passwordController,
                         prefixIcon: Icons.lock_outline,
@@ -309,7 +310,7 @@ class _SignInPageState extends State<SignInPage> {
                                           const SizedBox(width: 5),
                                           GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(
+                                              Get.offNamed(
                                                   RouteHelper.getSignUpPage());
                                             },
                                             child: const CustomText(

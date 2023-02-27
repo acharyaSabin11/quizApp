@@ -14,4 +14,32 @@ class AppColors {
   static const Color mediumOpacityWhiteColor = Color(0x6FFFFFFF);
   static const Color titleTextColor = Color(0xFF000000);
   static const Color textColor = Color(0xFF606060);
+
+  static const List<LinearGradient> homePageGradients = [
+    LinearGradient(
+      colors: [
+        Color(0xFFFF7A46),
+        Color(0xFFFA256C),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromARGB(255, 4, 205, 236),
+        Color(0xFF0023FF),
+      ],
+    ),
+    //green gradient
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromRGBO(128, 255, 44, 1),
+        Color(0xFF058109),
+      ],
+    ),
+  ];
 }

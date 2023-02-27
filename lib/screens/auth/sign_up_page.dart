@@ -398,7 +398,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         const SizedBox(width: 5),
                                         GestureDetector(
                                           onTap: () {
-                                            Get.toNamed(
+                                            Get.offNamed(
                                                 RouteHelper.getSignInPage());
                                           },
                                           child: const CustomText(

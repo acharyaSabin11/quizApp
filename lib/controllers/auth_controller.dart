@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quizapp/routes/route_helper.dart';
@@ -24,6 +25,7 @@ class AuthController extends GetxController {
     );
   }
 
+  //* Sign in and Sign up with email and password
   Future signIn(String email, String password) async {
     _showProgressIndicatorDialog();
     try {
@@ -46,7 +48,7 @@ class AuthController extends GetxController {
     //Popinng the circular progress indicator dialog before navigating to the main page
     Navigator.of(Get.context!).pop();
     //Navigating to the main page if everything is set
-    Get.toNamed(RouteHelper.getMainPage());
+    Get.offAllNamed(RouteHelper.getMainPage());
   }
 
   Future signUp(
@@ -90,15 +92,10 @@ class AuthController extends GetxController {
     //Popinng the circular progress indicator dialog before navigating to the main page
     Navigator.of(Get.context!).pop();
     //Navigating to the main page if everything is set
-    Get.toNamed(RouteHelper.getMainPage());
+    Get.offAllNamed(RouteHelper.getMainPage());
   }
 
-  Future signOut() async {
-    await _auth.signOut();
-    Get.toNamed(RouteHelper.getSignInPage());
-    _googleSignIn.signOut();
-  }
-
+  //* Sign in with Google
   Future signInWithGoogle() async {
     GoogleSignInAccount? googleSignInAccount;
     UserCredential? userCredential;
@@ -157,7 +154,137 @@ class AuthController extends GetxController {
     Navigator.of(Get.context!).pop();
 
     //Navigating to the main page if everything is set
-    Get.toNamed(RouteHelper.getMainPage());
+    Get.offAllNamed(RouteHelper.getMainPage());
+  }
+
+  //* Sign in with Microsoft
+  Future signInWithMicrosoft() async {
+    MicrosoftAuthProvider provider = MicrosoftAuthProvider();
+    provider.addScope('user.read');
+    provider.addScope('profile');
+    UserCredential? userCredential;
+    _showProgressIndicatorDialog();
+    try {
+      userCredential = await _auth.signInWithProvider(provider);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        _showErrorDialog(
+            description:
+                'The account already exists with a different credential.');
+        return;
+      } else if (e.code == 'invalid-credential') {
+        _showErrorDialog(
+            description:
+                'Error occurred while accessing credentials. Try again.');
+        return;
+      } else if (e.code == 'web-context-canceled') {
+        _showErrorDialog(description: "Your Sign in process was canceled");
+        return;
+      } else {
+        _showErrorDialog(description: e.code);
+        return;
+      }
+    } catch (e) {
+      _showErrorDialog(description: e.toString());
+      return;
+    }
+
+    //Save user data to the database
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .set({
+        'name': userCredential.user!.displayName,
+        'email': userCredential.user!.email,
+        'uid': userCredential.user!.uid,
+      });
+    } catch (e) {
+      _showErrorDialog(description: e.toString());
+      return;
+    }
+
+    //Popinng the circular progress indicator dialog before navigating to the main page
+    Navigator.of(Get.context!).pop();
+
+    //Navigating to the main page if everything is set
+    Get.offAllNamed(RouteHelper.getMainPage());
+  }
+
+  //* Sign in with Facebook
+  Future signInWithFacebook() async {
+    LoginResult loginResult;
+    UserCredential? userCredential;
+    _showProgressIndicatorDialog();
+    try {
+      loginResult = await FacebookAuth.instance.login();
+    } catch (e) {
+      _showErrorDialog(description: e.toString());
+      return;
+    }
+
+    if (loginResult.status == LoginStatus.success) {
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      try {
+        userCredential =
+            await _auth.signInWithCredential(facebookAuthCredential);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          _showErrorDialog(
+              description:
+                  'The account already exists with a different credential. May be you have already signed in with Google or Microsoft.');
+          return;
+        } else if (e.code == 'invalid-credential') {
+          _showErrorDialog(
+              description:
+                  'Error occurred while accessing credentials. Try again.');
+          return;
+        } else if (e.code == 'web-context-canceled') {
+          _showErrorDialog(description: "Your Sign in process was canceled");
+          return;
+        } else {
+          _showErrorDialog(description: e.code);
+          return;
+        }
+      } catch (e) {
+        _showErrorDialog(description: e.toString());
+        return;
+      }
+    } else {
+      _showErrorDialog(description: "Something went wrong");
+      return;
+    }
+
+    //Save user data to the database
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .set({
+        'name': userCredential.user!.displayName,
+        'email': userCredential.user!.email,
+        'uid': userCredential.user!.uid,
+      });
+    } catch (e) {
+      _showErrorDialog(description: e.toString());
+      return;
+    }
+
+    //Popinng the circular progress indicator dialog before navigating to the main page
+    Navigator.of(Get.context!).pop();
+
+    //Navigating to the main page if everything is set
+    Get.offAllNamed(RouteHelper.getMainPage());
+  }
+
+  //* Sign out
+
+  Future signOut() async {
+    await _auth.signOut();
+    await FacebookAuth.instance.logOut();
+    await _googleSignIn.signOut();
+    Get.offAllNamed(RouteHelper.getSignInPage());
   }
 
   void _showErrorDialog({
