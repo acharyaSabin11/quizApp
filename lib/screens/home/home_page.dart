@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizapp/routes/route_helper.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../models/user_model.dart';
@@ -20,9 +21,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final double gridWidth = Dimensions.deviceScreenWidth * 0.78;
+  final double gridCrossAxisSpacing = Dimensions.width30;
+  final double gridMainAxisSpacing = Dimensions.height15;
+  late final double gridContainerSize;
   final userID = FirebaseAuth.instance.currentUser!.uid;
   UserModel? userModel;
   int listViewItemCount = 3;
+
+  List<String> listRouteList = [
+    RouteHelper.getCreateQuizPage(),
+    RouteHelper.getCreateQuizPage(),
+    RouteHelper.getCreateQuizPage(),
+  ];
+
+  List<String> listTitle1List = [
+    "Create",
+    "Join in",
+    "Challenge",
+  ];
+
+  List<String> listTitle2List = [
+    "Quiz",
+    "Quiz",
+    "Friends",
+  ];
+
+  List<String> gridImageList = [
+    "assets/images/science.png",
+    "assets/images/geography.png",
+    "assets/images/sports.png",
+    "assets/images/biology.png",
+  ];
+
+  List<String> gridTitleList = [
+    "Science",
+    "Geography",
+    "Sports",
+    "Biology",
+  ];
 
   //override init method
   @override
@@ -39,6 +76,7 @@ class _HomePageState extends State<HomePage> {
         userModel = UserModel.fromJson(value.data()!);
       });
     });
+    gridContainerSize = (gridWidth - (gridCrossAxisSpacing * 2)) / 2;
   }
 
   @override
@@ -74,23 +112,20 @@ class _HomePageState extends State<HomePage> {
         ),
         Center(
           child: SizedBox(
-            width: Dimensions.deviceScreenWidth * 0.78,
-            height: Dimensions.deviceScreenHeight * 0.35,
+            width: gridWidth,
+            height: Dimensions.deviceScreenHeight * 0.40,
             child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemCount: 4,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: Dimensions.width30,
-                    mainAxisSpacing: Dimensions.height15,
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) => Container(
-                      height: 100,
-                      width: 100,
-                      color: Colors.amber,
-                    )),
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.only(bottom: Dimensions.height10),
+              itemCount: 4,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisSpacing: gridCrossAxisSpacing,
+                  mainAxisSpacing: gridMainAxisSpacing,
+                  crossAxisCount: 2),
+              itemBuilder: (context, index) => _buildGridViewContainer(index),
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -104,7 +139,10 @@ class _HomePageState extends State<HomePage> {
           width: double.maxFinite,
           decoration: BoxDecoration(
               color: AppColors.mainBlueColor,
-              borderRadius: BorderRadius.circular(Dimensions.height35)),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(Dimensions.height35),
+                bottomRight: Radius.circular(Dimensions.height35),
+              )),
         ),
         //Left Small Circle Design
         Positioned(
@@ -195,7 +233,7 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         gradient: AppColors.homePageGradients[(index % 3)],
         borderRadius: BorderRadius.circular(Dimensions.height15),
-        image: DecorationImage(
+        image: const DecorationImage(
             image: AssetImage("assets/images/effect.png"), fit: BoxFit.fill),
       ),
       margin: EdgeInsets.only(
@@ -215,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                   height: Dimensions.height10,
                 ),
                 CustomText(
-                  text: "Create",
+                  text: listTitle1List[index],
                   textColor: Colors.white,
                   size: 25,
                 ),
@@ -223,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                   height: Dimensions.height10 / 2,
                 ),
                 BigText(
-                  text: "Quiz",
+                  text: listTitle2List[index],
                   textColor: Colors.white,
                   size: 35,
                 ),
@@ -231,7 +269,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ButtonPressEffectContainer(
               onTapFunction: () {
-                print(index);
+                Get.toNamed(listRouteList[index]);
               },
               margin: EdgeInsets.only(top: Dimensions.height10),
               height: Dimensions.height40,
@@ -241,10 +279,73 @@ class _HomePageState extends State<HomePage> {
                     image: AssetImage("assets/images/arrowBoxWithOpacity.png"),
                     fit: BoxFit.fill),
               ),
-              child: SizedBox(height: 0),
+              child: const SizedBox(height: 0),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildGridViewContainer(int index) {
+    index = index % 4;
+    return ButtonPressEffectContainer(
+      onTapFunction: () {
+        print(index);
+      },
+      height:
+          0, //the size is controlled automatically by the gridview and is not needed to be set manually as height and width. But it is set to 0 because height and width are required parameters of buttonPressEffectContainer widget.
+      width: 0,
+      child: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                alignment: Alignment.bottomCenter,
+                height: gridContainerSize * 0.7,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(Dimensions.height10 / 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 3,
+                      blurRadius: 3,
+                      offset: const Offset(2, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      height: Dimensions.height20,
+                    ),
+                    CustomText(
+                      text: gridTitleList[index],
+                      size: 20,
+                      fontWeight: FontWeight.w500,
+                      textColor: AppColors.gridTextColors[index],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              height: gridContainerSize / 1.3,
+              width: gridContainerSize / 1.3,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage(gridImageList[index]),
+                fit: BoxFit.cover,
+              )),
+            ),
+          )
+        ],
       ),
     );
   }

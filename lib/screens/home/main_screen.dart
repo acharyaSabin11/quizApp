@@ -35,8 +35,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     pageController.addListener(() {
       setState(() {
-        currentIndex = pageController.page!.floor();
-        print(currentIndex);
+        currentIndex = pageController.page!.round();
       });
     });
   }
@@ -46,144 +45,140 @@ class _MainScreenState extends State<MainScreen> {
     return ExitEnabledWidget(
       child: Scaffold(
         backgroundColor: AppColors.backgroundWhiteColor,
-        body: PageView.builder(
-            controller: pageController,
-            itemCount: pageCount,
-            itemBuilder: (context, index) {
-              return screens[index];
-            }),
-        bottomNavigationBar: SizedBox(
-          height: Dimensions.height20 + Dimensions.height35 * 2.5,
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: EdgeInsets.only(
-                      bottom: Dimensions.height20,
-                      left: Dimensions.width20,
-                      right: Dimensions.width20),
-                  height: Dimensions.height60,
-                  decoration: BoxDecoration(
-                    color: AppColors.mainBlueColor,
-                    borderRadius: BorderRadius.circular(Dimensions.height15),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 0;
-                            pageController.animateToPage(currentIndex,
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.linear);
-                          });
-                        },
-                        icon: Icon(
-                          Icons.home,
-                          color: currentIndex == 0
-                              ? Colors.white
-                              : Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 1;
-                            pageController.animateToPage(currentIndex,
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.linear);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.clockRotateLeft,
-                          size: 20,
-                          color: currentIndex == 1
-                              ? Colors.white
-                              : Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                      SizedBox(
-                        width: Dimensions.width30 * 2,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 2;
-                            pageController.animateToPage(currentIndex,
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.linear);
-                          });
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.trophy,
-                          size: 20,
-                          color: currentIndex == 2
-                              ? Colors.white
-                              : Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex = 3;
-                            pageController.animateToPage(currentIndex,
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.linear);
-                          });
-                        },
-                        icon: Icon(
-                          Icons.person,
-                          color: currentIndex == 3
-                              ? Colors.white
-                              : Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: Dimensions.height20 + Dimensions.height35 / 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        body: Stack(
+          children: [
+            PageView.builder(
+                controller: pageController,
+                itemCount: pageCount,
+                itemBuilder: (context, index) {
+                  return screens[index];
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: Dimensions.height20 + Dimensions.height35 * 2.5,
+                child: Stack(
                   children: [
-                    Container(
-                      height: Dimensions.height35 * 2,
-                      width: Dimensions.height35 * 2,
-                      decoration: BoxDecoration(
-                        color: AppColors.backgroundWhiteColor,
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.height35,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            bottom: Dimensions.height20,
+                            left: Dimensions.width20,
+                            right: Dimensions.width20),
+                        height: Dimensions.height60,
+                        decoration: BoxDecoration(
+                          color: AppColors.mainBlueColor,
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.height15),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                pageController.animateToPage(0,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut);
+                              },
+                              icon: Icon(
+                                Icons.home,
+                                color: currentIndex == 0
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                pageController.animateToPage(1,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.linear);
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.clockRotateLeft,
+                                size: 20,
+                                color: currentIndex == 1
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30 * 2,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                pageController.animateToPage(2,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.linear);
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.trophy,
+                                size: 20,
+                                color: currentIndex == 2
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                pageController.animateToPage(3,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.linear);
+                              },
+                              icon: Icon(
+                                Icons.person,
+                                color: currentIndex == 3
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.all(Dimensions.height5),
-                          decoration: BoxDecoration(
-                            color: AppColors.mainBlueColor,
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.height35,
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: Dimensions.height20 + Dimensions.height35 / 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: Dimensions.height35 * 2,
+                            width: Dimensions.height35 * 2,
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundWhiteColor,
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.height35,
+                              ),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                margin: EdgeInsets.all(Dimensions.height5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.mainBlueColor,
+                                  borderRadius: BorderRadius.circular(
+                                    Dimensions.height35,
+                                  ),
+                                ),
+                                child: Center(
+                                    child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: Dimensions.height35,
+                                )),
+                              ),
                             ),
                           ),
-                          child: Center(
-                              child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: Dimensions.height35,
-                          )),
-                        ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

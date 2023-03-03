@@ -14,6 +14,7 @@ class AppColors {
   static const Color mediumOpacityWhiteColor = Color(0x6FFFFFFF);
   static const Color titleTextColor = Color(0xFF000000);
   static const Color textColor = Color(0xFF606060);
+  static const Color brightCyanColor = Color(0xFF30D6FF);
 
   static const List<LinearGradient> homePageGradients = [
     LinearGradient(
@@ -41,5 +42,12 @@ class AppColors {
         Color(0xFF058109),
       ],
     ),
+  ];
+
+  static const List<Color> gridTextColors = [
+    Color(0xFFfd568c),
+    Color(0xFF348af3),
+    Color(0xFFb745ff),
+    Color(0xFF15be9e),
   ];
 }
