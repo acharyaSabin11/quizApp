@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizapp/controllers/profile_image_controller.dart';
 import 'package:quizapp/widgets/effects/button_press_effect_container.dart';
 import '../../controllers/auth_controller.dart';
 import '../../utilities/app_colors.dart';
@@ -16,6 +19,30 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<String> badgeLowerContainerText = [
+    "World Rank",
+    "Local Rank",
+    "Score",
+  ];
+
+  List<String> badgeLowerContainerValue = [
+    "7,373,025",
+    "1,913",
+    "5,400",
+  ];
+
+  List<String> badgeLowerContainerImages = [
+    "assets/images/worldRank.png",
+    "assets/images/localRank.png",
+    "assets/images/score.png",
+  ];
+
+  List<String> badgeUpperContainerImages = [
+    "assets/images/badge1.png",
+    "assets/images/badge2.png",
+    "assets/images/badge3.png",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -80,36 +107,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Container(
+                      for (int index = 0; index < 3; index++)
+                        Container(
+                          width: Dimensions.width40 * 2,
                           decoration: const BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage(
-                              "assets/images/hexagonWithBorder.png",
+                            image: DecorationImage(
+                              image: AssetImage(
+                                "assets/images/hexagon.png",
+                              ),
                             ),
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage(
-                              "assets/images/hexagonWithBorder.png",
+                          ),
+                          child: Center(
+                            child: Container(
+                              width: Dimensions.width20 * 2.5,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      badgeUpperContainerImages[index]),
+                                ),
+                              ),
                             ),
-                          )),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage(
-                              "assets/images/hexagonWithBorder.png",
-                            ),
-                          )),
-                        ),
-                      ),
                     ],
                   ),
                 )
@@ -117,11 +136,52 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: Dimensions.height10),
+          //Lower Container
           Container(
+            padding: EdgeInsets.all(Dimensions.height10),
             width: double.maxFinite,
-            height: Dimensions.height130 * 1.0,
+            height: Dimensions.height130,
             decoration: const BoxDecoration(
               color: AppColors.backgroundWhiteColor,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (int index = 0; index < 3; index++)
+                  SizedBox(
+                    width: Dimensions.width40 * 2.3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          height: Dimensions.height40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                badgeLowerContainerImages[index],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            CustomText(
+                              text: badgeLowerContainerText[index],
+                              textColor: AppColors.textColor,
+                              size: 15,
+                            ),
+                            SizedBox(height: Dimensions.height5),
+                            BigText(
+                              text: badgeLowerContainerValue[index],
+                              textColor: AppColors.titleTextColor,
+                              size: 16,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+              ],
             ),
           ),
         ],
@@ -152,15 +212,32 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Stack(
             children: [
-              CircleAvatar(
-                radius: Dimensions.height60,
-                backgroundColor: AppColors.mainBlueColor,
+              Obx(
+                () => CircleAvatar(
+                  radius: Dimensions.height60,
+                  backgroundColor: Color.fromRGBO(0, 35, 255, 1),
+                  backgroundImage:
+                      Get.find<ProfileImageController>().profileImageUrl == ""
+                          ? null
+                          : FileImage(
+                              File(Get.find<ProfileImageController>()
+                                  .profileImageUrl
+                                  .value),
+                            ),
+                  // await (File(
+                  //         "/data/user/0/com.example.quizapp/app_flutter/sOB2LakOYtUjgDZeCY9L62pZLlf1.jpg")).exists()?
+                  // FileImage(File(
+                  //         "/data/user/0/com.example.quizapp/app_flutter/sOB2LakOYtUjgDZeCY9L62pZLlf1.jpg")) ??
+                  //     null,
+                ),
               ),
               Positioned(
                 bottom: 0,
                 right: 0,
                 child: ButtonPressEffectContainer(
-                  onTapFunction: () {},
+                  onTapFunction: () {
+                    Get.find<ProfileImageController>().pickImage();
+                  },
                   height: Dimensions.height40,
                   width: Dimensions.width40,
                   decoration: BoxDecoration(
@@ -181,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: Dimensions.height15),
           BigText(
-            text: "Jay Shah",
+            text: Get.find<AuthController>().currentUser!.displayName!,
             textColor: AppColors.titleTextColor,
           ),
           SizedBox(height: Dimensions.height15),

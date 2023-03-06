@@ -8,26 +8,16 @@ import 'package:quizapp/routes/route_helper.dart';
 import 'package:quizapp/utilities/app_colors.dart';
 import 'package:quizapp/widgets/big_text.dart';
 import 'package:quizapp/widgets/custom_dialog.dart';
-import 'package:quizapp/widgets/empty_custom_dialog.dart';
+import '../utilities/common_ui_functions.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  void _showProgressIndicatorDialog() {
-    showDialog(
-      context: Get.context!,
-      builder: (context) => const EmptyCustomDialog(
-        child: CircularProgressIndicator(
-          color: AppColors.mainBlueColor,
-        ),
-      ),
-    );
-  }
+  User? get currentUser => _auth.currentUser!;
 
   //* Sign in and Sign up with email and password
   Future signIn(String email, String password) async {
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog();
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
@@ -55,7 +45,7 @@ class AuthController extends GetxController {
       {required String email,
       required String password,
       required String name}) async {
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog();
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -104,7 +94,7 @@ class AuthController extends GetxController {
     }); //this catch error doesnt work in debug mode but works in release mode so it will cause no issue later.
 
     if (googleSignInAccount != null) {
-      _showProgressIndicatorDialog();
+      showProgressIndicatorDialog();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
       AuthCredential credential = GoogleAuthProvider.credential(
@@ -163,7 +153,7 @@ class AuthController extends GetxController {
     provider.addScope('user.read');
     provider.addScope('profile');
     UserCredential? userCredential;
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog();
     try {
       userCredential = await _auth.signInWithProvider(provider);
     } on FirebaseAuthException catch (e) {
@@ -215,7 +205,7 @@ class AuthController extends GetxController {
   Future signInWithFacebook() async {
     LoginResult loginResult;
     UserCredential? userCredential;
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog();
     try {
       loginResult = await FacebookAuth.instance.login();
     } catch (e) {

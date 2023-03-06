@@ -15,6 +15,8 @@ class AppColors {
   static const Color titleTextColor = Color(0xFF000000);
   static const Color textColor = Color(0xFF606060);
   static const Color brightCyanColor = Color(0xFF30D6FF);
+  static const Color leaderBoardBlueColor = Color(0xFF0091f8);
+  static const Color leaderBoardCyanColor = Color(0xFF15d9ff);
 
   static const List<LinearGradient> homePageGradients = [
     LinearGradient(

@@ -73,5 +73,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     // implementation 'com.facebook.android:facebook-login:latest.release'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+    //firebase app check
+    // implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+    // implementation 'com.google.firebase:firebase-appcheck-playintegrity'
 
 }
