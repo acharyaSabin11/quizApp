@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quizapp/controllers/user_controller.dart';
 import 'package:quizapp/routes/route_helper.dart';
 
 import '../../controllers/auth_controller.dart';
@@ -25,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   final double gridCrossAxisSpacing = Dimensions.width30;
   final double gridMainAxisSpacing = Dimensions.height15;
   late final double gridContainerSize;
-  final userID = FirebaseAuth.instance.currentUser!.uid;
   UserModel? userModel;
   int listViewItemCount = 3;
 
@@ -66,16 +64,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     //fetching the user data from the firestore
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(userID)
-        .get()
-        .then((value) {
-      //setting the user data to the auth controller
-      setState(() {
-        userModel = UserModel.fromJson(value.data()!);
-      });
-    });
     gridContainerSize = (gridWidth - (gridCrossAxisSpacing * 2)) / 2;
   }
 
@@ -202,10 +190,12 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: Dimensions.height10,
                   ),
-                  BigText(
-                    text: userModel?.name ?? "user...",
-                    size: 30,
-                  ),
+                  GetBuilder<UserController>(builder: (userController) {
+                    return BigText(
+                      text: userController.userModel?.name ?? "user...",
+                      size: 30,
+                    );
+                  }),
                 ],
               ),
             ),

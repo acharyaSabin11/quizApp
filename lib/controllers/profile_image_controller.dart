@@ -6,7 +6,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:quizapp/controllers/auth_controller.dart';
+import 'package:quizapp/controllers/user_controller.dart';
 import 'package:quizapp/utilities/app_colors.dart';
 import 'package:quizapp/utilities/app_constants.dart';
 import 'package:quizapp/utilities/common_ui_functions.dart';
@@ -18,46 +18,83 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileImageController extends GetxController {
+  //to save the information that the image is present or not
   SharedPreferences sharedPreferences = Get.find();
+
+  //  to get the current user
+  UserController userController = Get.find();
+
+  //to pick the image from the gallery or camera
   final ImagePicker _imagePicker = ImagePicker();
-  XFile? image;
+  XFile? image; //to store the image picked from the gallery or camera
+
+  //to store the cropped image data
   CroppedFile? croppedFile;
+
+  //to store the compressed image data
   File? compressedFileToUpload;
-  Reference firebaseStorageRef = FirebaseStorage.instance
+
+  //Reference to the firebase storage image-storing folder(profileImage) along with the user id as the name of the file
+  Reference firebaseStorageImageRef = FirebaseStorage.instance
       .ref()
       .child("profileImages")
-      .child(Get.find<AuthController>().currentUser!.uid);
+      .child(Get.find<UserController>().userModel!.uid);
 
+  //Provides the image url of the image stored in device storage
   RxString profileImageUrl = "".obs;
 
+  //List of titles to be shown in the bottom sheet
+  List<String> titles = [
+    'Camera',
+    'Gallery',
+  ];
+
+  //List of path of the images to be shown in the bottom sheet
+  List<String> imagePath = [
+    'assets/images/camera.png',
+    'assets/images/gallery.png',
+  ];
+
+  //constructor of the class to get the initial profile image
+  ProfileImageController() {
+    getInitialProfileImage();
+  }
+
+  //when the app loads, it checks if the image is present in the device storage or not. If it is present, then it sets the profileImageUrl to the path of the image stored in the device storage. If it is not present, then it checks if the image is present in the firebase storage or not. If it is present, then it downloads the image and sets the profileImageUrl to the path of the image stored in the device storage. If it is not present in firebase storage, then it sets the profileImageUrl to an empty string.
   void getInitialProfileImage() async {
+    //checking if the firebase sotrage reference exists or not
     if (sharedPreferences.containsKey(AppConstants.profileImagePresentKey)) {
       if (sharedPreferences.getBool(AppConstants.profileImagePresentKey)!) {
         profileImageUrl.value = Get.find<SharedPreferences>()
             .getString(AppConstants.profileImagePathKey)!;
       }
+    } else {
+      try {
+        //getting path in device storage to store the image
+        final newPath = path.join(
+            (await getApplicationDocumentsDirectory()).path,
+            "${userController.userModel!.uid}${DateTime.now()}.jpg");
+        final file = File(newPath);
+        //downloading the image from firebase storage directly to the device storage
+        await firebaseStorageImageRef.writeToFile(
+            file); //if image is not present it throws exception and goes to catch block which shows that the image is not present on firebase storage.
+        //setting the profileImageUrl to the path of the image stored in the device storage
+        profileImageUrl.value = newPath;
+        //setting the profileImagePresentKey to true
+        sharedPreferences.setBool(AppConstants.profileImagePresentKey, true);
+        //setting the profileImagePathKey to the path of the image stored in the device storage
+        sharedPreferences.setString(AppConstants.profileImagePathKey, newPath);
+      } catch (e) {
+        profileImageUrl.value = "";
+      }
     }
   }
 
-  void saveFileLoacally() async {
-    final newPath = path.join(
-        (await getApplicationDocumentsDirectory()).path,
-        Get.find<AuthController>().currentUser!.uid +
-            path.extension(croppedFile!.path));
-    print(newPath);
-    File file = File(newPath);
-    await file.writeAsBytes(await compressedFileToUpload!.readAsBytes());
-    Get.find<SharedPreferences>()
-        .setBool(AppConstants.profileImagePresentKey, true);
-    Get.find<SharedPreferences>()
-        .setString(AppConstants.profileImagePathKey, newPath);
-  }
-
-  ProfileImageController() {
-    getInitialProfileImage();
-  }
+  //when user presses the edit image button, it shows the bottom sheet to choose between camera and gallery. It also sets the image variable to the image picked from the gallery or camera. If the user cancels the process, then it sets the image variable to null. If the user selects any image from camera or gallary, then it directs user to crop the image. If user cancels the cropping, then it sets the croppedFile variable to null. If user crops the image, then it compresses the image and uploads it to firebase storage. If the image is successfully uploaded to firebase storage, then it saves the compressed image to the device storage. If the image is successfully saved to the device storage, then it shows a snackbar to the user and sets the profileImageUrl to the path of the image stored in the device storage.
   void pickImage() async {
     image = null;
+    croppedFile = null;
+    compressedFileToUpload = null;
     await customShowBottomSheet();
     if (image != null) {
       await cropImage();
@@ -65,76 +102,20 @@ class ProfileImageController extends GetxController {
         showProgressIndicatorDialog();
         compressedFileToUpload = await compressImage();
         if (compressedFileToUpload != null) {
-          await uploadImageToFirebase();
-          saveFileLoacally();
+          if (await uploadImageToFirebase()) {
+            await saveCompressedFileLoacally();
+            showAppSnackbar(
+              title: "Success",
+              description: "Profile Image Updated Successfully",
+            );
+          }
         }
-        Get.back();
+        Navigator.of(Get.context!).pop();
       }
     }
   }
 
-  List<IconData> icons = [
-    Icons.camera,
-    Icons.image,
-  ];
-
-  List<String> titles = [
-    'Camera',
-    'Gallery',
-  ];
-
-  List<String> imagePath = [
-    'assets/images/camera.png',
-    'assets/images/gallery.png',
-  ];
-
-  Future<File> compressImage() async {
-    final newPath = path.join((await getTemporaryDirectory()).path,
-        "${DateTime.now()}", "${path.extension(croppedFile!.path)}");
-    try {
-      final compressedImage = await FlutterImageCompress.compressAndGetFile(
-        croppedFile!.path,
-        newPath,
-        quality: 50,
-      );
-      return compressedImage!;
-    } catch (e) {
-      print(e);
-      return File(croppedFile!.path);
-    }
-  }
-
-  Future<void> uploadImageToFirebase() async {
-    final result =
-        await firebaseStorageRef.putFile(File(compressedFileToUpload!.path));
-    profileImageUrl.value = await result.ref.getDownloadURL();
-  }
-
-  Future<void> cropImage() async {
-    croppedFile = await ImageCropper().cropImage(
-      sourcePath: image!.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-      ],
-      uiSettings: [
-        AndroidUiSettings(
-          backgroundColor: Colors.white,
-          statusBarColor: AppColors.mainBlueColor,
-          toolbarTitle: 'Crop Image - Quiz App',
-          toolbarColor: AppColors.mainBlueColor,
-          toolbarWidgetColor: Colors.white,
-          activeControlsWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: true,
-          hideBottomControls: true,
-        ),
-        IOSUiSettings(
-          title: 'Crop Image',
-        ),
-      ],
-    );
-  }
-
+  // to show the bottom sheet to choose between camera and gallery. It also sets the image variable to the image picked from the gallery or camera. If the user cancels the process, then it sets the image variable to null.
   Future<void> customShowBottomSheet() async {
     return showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -222,5 +203,86 @@ class ProfileImageController extends GetxController {
         );
       },
     );
+  }
+
+  //to crop the image. If user cancels the cropping, then croppedFile variable is set to null.
+  Future<void> cropImage() async {
+    croppedFile = await ImageCropper().cropImage(
+      sourcePath: image!.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+          backgroundColor: Colors.white,
+          statusBarColor: AppColors.mainBlueColor,
+          toolbarTitle: 'Crop Image - Quiz App',
+          toolbarColor: AppColors.mainBlueColor,
+          toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: true,
+          hideBottomControls: true,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+        ),
+      ],
+    );
+  }
+
+  //to compress the image. If the image is successfully compressed, then it returns the compressed image. If the image is not compressed, then it returns null.
+  Future<File?> compressImage() async {
+    final newPath = path.join((await getTemporaryDirectory()).path,
+        "${DateTime.now()}${path.extension(croppedFile!.path)}");
+    try {
+      final compressedImage = await FlutterImageCompress.compressAndGetFile(
+        croppedFile!.path,
+        newPath,
+        quality: 50,
+      );
+      return compressedImage;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //to upload the image to firebase storage.
+  Future<bool> uploadImageToFirebase() async {
+    try {
+      await firebaseStorageImageRef.putFile(File(compressedFileToUpload!.path));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  //the compressed image during upload is stored in the device storage.
+  Future<void> saveCompressedFileLoacally() async {
+    final newPath = path.join(
+        (await getApplicationDocumentsDirectory()).path,
+        userController.userModel!.uid +
+            DateTime.now().toString() +
+            path.extension(croppedFile!.path));
+    File file = File(newPath);
+    await file.writeAsBytes(await compressedFileToUpload!.readAsBytes());
+    Get.find<SharedPreferences>()
+        .setBool(AppConstants.profileImagePresentKey, true);
+    Get.find<SharedPreferences>()
+        .setString(AppConstants.profileImagePathKey, newPath);
+    profileImageUrl.value = newPath;
+  }
+
+  // this method deletes the image from the device storage and sets the profileImageUrl to an empty string. It is called when the user signs out. It also removes the profileImagePathKey and profileImagePresentKey from the shared preferences.
+  void deleteProfileImageFromLocalStorage() {
+    if (sharedPreferences.containsKey(AppConstants.profileImagePresentKey)) {
+      final path =
+          sharedPreferences.getString(AppConstants.profileImagePathKey);
+      File pathFile = File(path!);
+      pathFile.delete();
+      sharedPreferences.remove(AppConstants.profileImagePathKey);
+      sharedPreferences.remove(AppConstants.profileImagePresentKey);
+      profileImageUrl.value = "";
+    }
   }
 }

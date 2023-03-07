@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizapp/controllers/profile_image_controller.dart';
+import 'package:quizapp/controllers/user_controller.dart';
 import 'package:quizapp/widgets/effects/button_press_effect_container.dart';
 import '../../controllers/auth_controller.dart';
 import '../../utilities/app_colors.dart';
@@ -213,23 +216,29 @@ class _ProfilePageState extends State<ProfilePage> {
           Stack(
             children: [
               Obx(
-                () => CircleAvatar(
-                  radius: Dimensions.height60,
-                  backgroundColor: Color.fromRGBO(0, 35, 255, 1),
-                  backgroundImage:
-                      Get.find<ProfileImageController>().profileImageUrl == ""
-                          ? null
-                          : FileImage(
-                              File(Get.find<ProfileImageController>()
-                                  .profileImageUrl
-                                  .value),
-                            ),
-                  // await (File(
-                  //         "/data/user/0/com.example.quizapp/app_flutter/sOB2LakOYtUjgDZeCY9L62pZLlf1.jpg")).exists()?
-                  // FileImage(File(
-                  //         "/data/user/0/com.example.quizapp/app_flutter/sOB2LakOYtUjgDZeCY9L62pZLlf1.jpg")) ??
-                  //     null,
-                ),
+                () {
+                  ProfileImageController profileImageController = Get.find();
+                  return CircleAvatar(
+                    radius: Dimensions.height60,
+                    backgroundColor: const Color(0xFF0023FF),
+                    backgroundImage: profileImageController
+                                .profileImageUrl.value ==
+                            ""
+                        ? null
+                        : FileImage(
+                            File(profileImageController.profileImageUrl.value),
+                          ),
+                    child: profileImageController.profileImageUrl.value == ""
+                        ? GetBuilder<UserController>(builder: (userController) {
+                            return BigText(
+                              text: userController.userModel!.name[0],
+                              size: Dimensions.height50 * 2,
+                              textColor: Colors.white,
+                            );
+                          })
+                        : null,
+                  );
+                },
               ),
               Positioned(
                 bottom: 0,
@@ -240,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   height: Dimensions.height40,
                   width: Dimensions.width40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
                         "assets/images/hexagonWithBorder.png",
@@ -250,17 +259,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Icon(
                     Icons.edit,
                     color: Colors.white,
-                    size: 20,
+                    size: Dimensions.height20,
                   ),
                 ),
               )
             ],
           ),
           SizedBox(height: Dimensions.height15),
-          BigText(
-            text: Get.find<AuthController>().currentUser!.displayName!,
-            textColor: AppColors.titleTextColor,
-          ),
+          GetBuilder<UserController>(builder: (userController) {
+            return BigText(
+              text: userController.userModel!.name,
+              textColor: AppColors.titleTextColor,
+            );
+          }),
           SizedBox(height: Dimensions.height15),
           Row(
             children: [
@@ -272,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Dimensions.height10,
                     ),
                   ),
-                  child: CustomText(
+                  child: const CustomText(
                     text: "35 Followers",
                     size: 18,
                   ),

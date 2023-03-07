@@ -58,9 +58,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: Dimensions.height20,
-                          backgroundImage: const NetworkImage(
-                            "https://th.bing.com/th/id/R.95e45a66c918a53280e796b44add2d66?rik=oVKQ59XBdewj8Q&pid=ImgRaw&r=0",
-                          ),
+                          // backgroundImage: const NetworkImage(
+                          //   "https://th.bing.com/th/id/R.95e45a66c918a53280e796b44add2d66?rik=oVKQ59XBdewj8Q&pid=ImgRaw&r=0",
+                          // ),
                         ),
                         title: const BigText(
                           text: "John Doe",
@@ -166,14 +166,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                             width: Dimensions.deviceScreenWidth * 0.25,
                             child: winnerBox("third", ""),
                           ),
-                          // Expanded(
-                          //   flex: 5,
-                          //   child: winnerBox("first", ""),
-                          // ),
-                          // Expanded(
-                          //   flex: 3,
-                          //   child: winnerBox("third", ""),
-                          // ),
                         ],
                       ),
                     ),

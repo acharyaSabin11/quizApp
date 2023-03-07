@@ -26,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   AuthController authController = Get.find();
+
   bool isFormValid() {
     bool isEmailValid = false;
     bool isPasswordValid = false;

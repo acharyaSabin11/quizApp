@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:quizapp/controllers/user_controller.dart';
 import 'package:quizapp/screens/home/home_page.dart';
 import 'package:quizapp/screens/home/profile_page.dart';
 import 'package:quizapp/utilities/app_colors.dart';
@@ -17,14 +19,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final UserController userController = Get.find();
   final int pageCount = 4;
   final PageController pageController = PageController();
 
   List<Widget> screens = [
-    HomePage(),
-    HistoryPage(),
-    LeaderboardPage(),
-    ProfilePage(),
+    const HomePage(),
+    const HistoryPage(),
+    const LeaderboardPage(),
+    const ProfilePage(),
   ];
 
   int currentIndex = 0;

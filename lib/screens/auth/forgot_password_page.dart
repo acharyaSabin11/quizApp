@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quizapp/controllers/auth_controller.dart';
 import 'package:quizapp/routes/route_helper.dart';
+import 'package:quizapp/utilities/common_ui_functions.dart';
 import 'package:quizapp/widgets/effects/button_press_effect_container.dart';
 import 'package:quizapp/widgets/exit_enabled_widget.dart';
 import '../../utilities/app_colors.dart';
@@ -12,18 +13,17 @@ import '../../widgets/big_text.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/sign_in_options_widget.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   late AuthController _authController;
   String? emailErrorText, passwordErrorText;
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -33,9 +33,11 @@ class _SignInPageState extends State<SignInPage> {
 
   bool isFormValid() {
     bool isEmailValid = false;
-    bool isPasswordValid = false;
-
-    if (emailController.text.contains("@") &&
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailErrorText = "Email is required";
+      });
+    } else if (emailController.text.contains("@") &&
         emailController.text.contains(".")) {
       setState(() {
         emailErrorText = null;
@@ -47,19 +49,7 @@ class _SignInPageState extends State<SignInPage> {
       });
     }
 
-    if (passwordController.text.length < AppConstants.minimumPasswordLength) {
-      setState(() {
-        passwordErrorText =
-            "Password must be at least ${AppConstants.minimumPasswordLength} characters";
-      });
-    } else {
-      setState(() {
-        passwordErrorText = null;
-      });
-      isPasswordValid = true;
-    }
-
-    if (isEmailValid && isPasswordValid) {
+    if (isEmailValid) {
       return true;
     } else {
       return false;
@@ -70,7 +60,6 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void dispose() {
     emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -113,47 +102,13 @@ class _SignInPageState extends State<SignInPage> {
                         prefixIcon: Icons.email_outlined,
                         hintText: "ABCXYZ@gmail.com",
                       ),
-                      SizedBox(
-                        height: Dimensions.height20,
-                      ),
-                      const CustomText(
-                        fontWeight: FontWeight.w500,
-                        text: "Password",
-                        textColor: Colors.black,
-                        size: 16,
-                      ),
-                      SizedBox(height: Dimensions.height10),
-                      AppTextField(
-                        hasHideButton: true,
-                        errorText: passwordErrorText,
-                        textEditingController: passwordController,
-                        prefixIcon: Icons.lock_outline,
-                        hintText: "Password",
-                      ),
-                      SizedBox(height: Dimensions.height10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.offNamed(RouteHelper.getForgotPasswordPage());
-                            },
-                            child: const CustomText(
-                              text: "Forgot Password?",
-                              textColor: AppColors.logoBlueColor,
-                              size: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
                       SizedBox(height: Dimensions.height30),
                       ButtonPressEffectContainer(
                         onTapFunction: () async {
                           if (isFormValid()) {
-                            await _authController.signIn(
-                                emailController.text.trim(),
-                                passwordController.text.trim());
+                            await _authController.forgotPassword(
+                              email: emailController.text.trim(),
+                            );
                           }
                         },
                         decoration: BoxDecoration(
@@ -164,23 +119,11 @@ class _SignInPageState extends State<SignInPage> {
                         width: double.maxFinite,
                         child: const Center(
                           child: CustomText(
-                            text: "Sign In",
+                            text: "Send Reset Mail",
                           ),
                         ),
                       ),
-                      //forgot password
-
                       SizedBox(height: Dimensions.height20),
-                      const Center(
-                        child: CustomText(
-                          text: "Sign In With",
-                          textColor: AppColors.mainBlueColor,
-                          size: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: Dimensions.height20),
-                      SignInOptionsWidget(),
                     ],
                   ),
                 ),
@@ -314,7 +257,7 @@ class _SignInPageState extends State<SignInPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const BigText(
-                                        text: "Sign In",
+                                        text: "Forgot Password",
                                         textColor: Colors.white,
                                         size: 30,
                                       ),
@@ -322,7 +265,7 @@ class _SignInPageState extends State<SignInPage> {
                                       Row(
                                         children: [
                                           const CustomText(
-                                            text: "Don't have an account?",
+                                            text: "Remember Password?",
                                             textColor: Colors.white,
                                             size: 16,
                                           ),
@@ -330,10 +273,10 @@ class _SignInPageState extends State<SignInPage> {
                                           GestureDetector(
                                             onTap: () {
                                               Get.offNamed(
-                                                  RouteHelper.getSignUpPage());
+                                                  RouteHelper.getSignInPage());
                                             },
                                             child: const CustomText(
-                                              text: "Sign Up",
+                                              text: "Sign In",
                                               textColor:
                                                   AppColors.logoBlueColor,
                                               size: 16,
