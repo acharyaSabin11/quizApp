@@ -35,10 +35,7 @@ class ProfileImageController extends GetxController {
   File? compressedFileToUpload;
 
   //Reference to the firebase storage image-storing folder(profileImage) along with the user id as the name of the file
-  Reference firebaseStorageImageRef = FirebaseStorage.instance
-      .ref()
-      .child("profileImages")
-      .child(Get.find<UserController>().userModel!.uid);
+  late Reference firebaseStorageImageRef;
 
   //Provides the image url of the image stored in device storage
   RxString profileImageUrl = "".obs;
@@ -57,6 +54,10 @@ class ProfileImageController extends GetxController {
 
   //constructor of the class to get the initial profile image
   ProfileImageController() {
+    firebaseStorageImageRef = FirebaseStorage.instance
+        .ref()
+        .child("profileImages")
+        .child(userController.userModel!.uid);
     getInitialProfileImage();
   }
 

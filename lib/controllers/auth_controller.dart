@@ -18,15 +18,21 @@ class AuthController extends GetxController {
   final SharedPreferences sharedPreferences = Get.find();
 
   //Saving userdata in memory
-  Future<void> saveUserDataInMemory() async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      sharedPreferences.setString(
-          AppConstants.userDataKey, jsonEncode(value.data()));
-    });
+  Future<bool> saveUserDataInMemory() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((value) async {
+        await sharedPreferences.setString(
+            AppConstants.userDataKey, jsonEncode(value.data()));
+      });
+      return true;
+    } catch (e) {
+      showErrorDialog(description: e.toString());
+      return false;
+    }
   }
 
   //* Sign in and Sign up with email and password
@@ -52,10 +58,13 @@ class AuthController extends GetxController {
       return;
     }
     //Popinng the circular progress indicator dialog before navigating to the main page
-    await saveUserDataInMemory();
-    Navigator.of(Get.context!).pop();
-    //Navigating to the main page if everything is set
-    Get.offAllNamed(RouteHelper.getMainPage());
+    bool result = await saveUserDataInMemory();
+
+    if (result) {
+      Navigator.of(Get.context!).pop();
+      //Navigating to the main page if everything is set
+      Get.offAllNamed(RouteHelper.getMainPage());
+    }
   }
 
   Future signUp(
@@ -98,12 +107,14 @@ class AuthController extends GetxController {
       return;
     }
 
-    await saveUserDataInMemory();
+    bool result = await saveUserDataInMemory();
 
-    //Popinng the circular progress indicator dialog before navigating to the main page
-    Navigator.of(Get.context!).pop();
-    //Navigating to the main page if everything is set
-    Get.offAllNamed(RouteHelper.getMainPage());
+    if (result) {
+      //Popinng the circular progress indicator dialog before navigating to the main page
+      Navigator.of(Get.context!).pop();
+      //Navigating to the main page if everything is set
+      Get.offAllNamed(RouteHelper.getMainPage());
+    }
   }
 
   //* Sign in with Google
@@ -161,13 +172,14 @@ class AuthController extends GetxController {
       return;
     }
 
-    await saveUserDataInMemory();
+    bool result = await saveUserDataInMemory();
 
-    //Popinng the circular progress indicator dialog before navigating to the main page
-    Navigator.of(Get.context!).pop();
-
-    //Navigating to the main page if everything is set
-    Get.offAllNamed(RouteHelper.getMainPage());
+    if (result) {
+      //Popinng the circular progress indicator dialog before navigating to the main page
+      Navigator.of(Get.context!).pop();
+      //Navigating to the main page if everything is set
+      Get.offAllNamed(RouteHelper.getMainPage());
+    }
   }
 
   //* Sign in with Microsoft
@@ -217,13 +229,14 @@ class AuthController extends GetxController {
       return;
     }
 
-    await saveUserDataInMemory();
+    bool result = await saveUserDataInMemory();
 
-    //Popinng the circular progress indicator dialog before navigating to the main page
-    Navigator.of(Get.context!).pop();
-
-    //Navigating to the main page if everything is set
-    Get.offAllNamed(RouteHelper.getMainPage());
+    if (result) {
+      //Popinng the circular progress indicator dialog before navigating to the main page
+      Navigator.of(Get.context!).pop();
+      //Navigating to the main page if everything is set
+      Get.offAllNamed(RouteHelper.getMainPage());
+    }
   }
 
   //* Sign in with Facebook
@@ -286,13 +299,14 @@ class AuthController extends GetxController {
       return;
     }
 
-    await saveUserDataInMemory();
+    bool result = await saveUserDataInMemory();
 
-    //Popinng the circular progress indicator dialog before navigating to the main page
-    Navigator.of(Get.context!).pop();
-
-    //Navigating to the main page if everything is set
-    Get.offAllNamed(RouteHelper.getMainPage());
+    if (result) {
+      //Popinng the circular progress indicator dialog before navigating to the main page
+      Navigator.of(Get.context!).pop();
+      //Navigating to the main page if everything is set
+      Get.offAllNamed(RouteHelper.getMainPage());
+    }
   }
 
   //* Forgot password

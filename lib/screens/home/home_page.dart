@@ -192,7 +192,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GetBuilder<UserController>(builder: (userController) {
                     return BigText(
-                      text: userController.userModel?.name ?? "user...",
+                      text: userController.userModel == null
+                          ? "User..."
+                          : userController.userModel!.name,
                       size: 30,
                     );
                   }),
