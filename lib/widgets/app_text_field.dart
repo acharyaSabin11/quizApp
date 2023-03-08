@@ -9,6 +9,7 @@ class AppTextField extends StatefulWidget {
   IconData? prefixIcon;
   String? errorText;
   final bool hasHideButton;
+  TextInputType? keyboardType;
   final TextEditingController textEditingController;
   AppTextField({
     super.key,
@@ -17,6 +18,7 @@ class AppTextField extends StatefulWidget {
     this.errorText,
     required this.textEditingController,
     this.hasHideButton = false,
+    this.keyboardType,
   });
 
   @override
@@ -67,6 +69,7 @@ class _AppTextFieldState extends State<AppTextField> {
             ],
           ),
           child: TextField(
+            keyboardType: widget.keyboardType,
             obscureText: obscureText,
             focusNode: _focus,
             controller: widget.textEditingController,

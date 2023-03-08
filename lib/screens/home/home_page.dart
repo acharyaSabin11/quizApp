@@ -80,17 +80,22 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.symmetric(horizontal: Dimensions.width30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              BigText(
+            children: [
+              const BigText(
                 text: "Choose Categories",
                 textColor: AppColors.titleTextColor,
                 size: 20,
               ),
-              CustomText(
-                text: "See All",
-                textColor: Color(0xFF2ad3f9),
-                size: 16,
-                fontWeight: FontWeight.w500,
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.getAllCategoriesPage());
+                },
+                child: const CustomText(
+                  text: "See All",
+                  textColor: Color(0xFF2ad3f9),
+                  size: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

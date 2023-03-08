@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: Center(
                             child: Container(
-                              width: Dimensions.width20 * 2.5,
+                              width: Dimensions.width40,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage(

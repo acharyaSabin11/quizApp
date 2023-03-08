@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:quizapp/screens/auth/forgot_password_page.dart';
 import 'package:quizapp/screens/auth/sign_up_page.dart';
 import 'package:quizapp/screens/boarding/on_boarding_screen.dart';
+import 'package:quizapp/screens/category/all_categories_page.dart';
 import 'package:quizapp/screens/create_quiz_page.dart';
 import 'package:quizapp/screens/directors/auth_or_main_page_director.dart';
 import 'package:quizapp/utilities/app_constants.dart';
@@ -17,6 +18,7 @@ class RouteHelper {
   static const String _signInPage = '/signInPage';
   static const String _forgotPasswordPage = '/forgotPasswordPage';
   static const String _createQuizPage = '/createQuizPage';
+  static const String _allCategoriesPage = '/allCategoriesPage';
   static const String _initialPage = '/';
   static const String _mainPage = '/mainPage';
   static const String _authOrMainPageDirector = '/authOrMainPageDirector';
@@ -26,6 +28,7 @@ class RouteHelper {
   static getSignInPage() => _signInPage;
   static getForgotPasswordPage() => _forgotPasswordPage;
   static getCreateQuizPage() => _createQuizPage;
+  static getAllCategoriesPage() => _allCategoriesPage;
   static getMainPage() => _mainPage;
   static getAuthOrMainPageDirector() => _authOrMainPageDirector;
   static getInitialPage() {
@@ -47,7 +50,7 @@ class RouteHelper {
     ),
     GetPage(
       name: getSignUpPage(),
-      page: () => SignUpPage(),
+      page: () => const SignUpPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
@@ -72,6 +75,10 @@ class RouteHelper {
     GetPage(
       name: getCreateQuizPage(),
       page: () => const CreateQuizPage(),
+    ),
+    GetPage(
+      name: getAllCategoriesPage(),
+      page: () => AllCategoriesPage(),
     ),
   ];
 }
